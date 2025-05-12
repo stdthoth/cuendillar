@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@meteora-ag/dynamic-amm-sdk": "^1.3.5",
+    "@modelcontextprotocol/sdk": "^1.11.2",
+    "@solana/spl-token": "^0.4.13",
+    "@solana/web3.js": "^1.98.2"
+  }
+}
