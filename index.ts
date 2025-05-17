@@ -1,10 +1,14 @@
 import DLMM, { BinLiquidity, LbPosition, StrategyType } from "@meteora-ag/dlmm";
-import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { Keypair, PublicKey, sendAndConfirmTransaction } from "@solana/web3.js";
 import BN from "bn.js";
+import dotenv from "dotenv";
 import { z } from "zod";
 import { connection, user } from "./constants";
+
+// Load environment variables
+dotenv.config();
 
 let activeBin: BinLiquidity;
 let userPositions: LbPosition[] = [];
@@ -15,7 +19,10 @@ const newOneSidePosition = new Keypair();
 // Create an MCP server
 const server = new McpServer({
   name: "Cuendillar",
-  version: "1.0.0"
+  version: "1.0.0",
+  capabilities:{
+    tools:{}
+  }
 });
 
 server.tool("get-active-bin",
@@ -415,8 +422,14 @@ server.tool("swap",
   }
 )
 
+async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error("Weather MCP Server running on stdio");
+}
 
-
-const transport = new StdioServerTransport();
-await server.connect(transport);
+main().catch((error) => {
+  console.error("Fatal error in main():", error);
+  process.exit(1);
+});
 
