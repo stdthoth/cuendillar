@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "An Mcp server used to interact with meteora's dynamic liquid market maker",
   "main": "/dist/index.js",
+  "type": "module",
+  "bin": "./dist/index.js",
   "scripts": {
     "build": "tsc && shx chmod +x dist/*.js",
-    "start": "node index.ts",
+    "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "watch": "tsc --watch"
   },

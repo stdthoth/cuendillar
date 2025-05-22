@@ -32,7 +32,8 @@ server.tool("get-active-bin",
     
   
     const poolAddress = new PublicKey(poolAddr);
-    const dlmmPool = await DLMM.create(connection, poolAddress, {
+    const dlmm = (DLMM as any).default;
+    const dlmmPool = await dlmm.create(connection, poolAddress, {
       cluster: "devnet",
     });
     try {
@@ -71,11 +72,12 @@ server.tool("get-active-bin",
 server.tool("balance-deposit-position",
   "creates a balance deposit position",
   { poolAddr: z.string(), XAmount: z.number()},
-  async ({poolAddr,XAmount }) => {
+  async ({ poolAddr,XAmount }) => {
     
     
     const poolAddress = new PublicKey(poolAddr);
-    const dlmmPool = await DLMM.create(connection, poolAddress, {
+    const dlmm = (DLMM as any).default;
+    const dlmmPool = await dlmm.create(connection, poolAddress, {
       cluster: "devnet",
     });
 
@@ -132,7 +134,8 @@ server.tool("imbalance-deposit-position",
   async ({poolAddr,XAmount,YAmount}) => {
     
     const poolAddress = new PublicKey(poolAddr);
-    const dlmmPool = await DLMM.create(connection, poolAddress, {
+    const dlmm = (DLMM as any).default;
+    const dlmmPool = await dlmm.create(connection, poolAddress, {
       cluster: "devnet",
     });
     const TOTAL_RANGE_INTERVAL = 10; // 10 bins on each side of the active bin
@@ -182,8 +185,10 @@ server.tool("create-one-side-position",
   "creates a one side deposit position on an existing pool",
   { poolAddr: z.string(), XAmount: z.number(),YAmount: z.number()},
   async ({poolAddr,XAmount,YAmount}) => {
+    
     const poolAddress = new PublicKey(poolAddr);
-    const dlmmPool = await DLMM.create(connection, poolAddress, {
+    const dlmm = (DLMM as any).default;
+    const dlmmPool = await dlmm.create(connection, poolAddress, {
       cluster: "devnet",
     });
     const TOTAL_RANGE_INTERVAL = 10; // 10 bins on each side of the active bin
@@ -233,8 +238,9 @@ server.tool("get-positions-state",
 "gets the positions that the user has open in the pool",
 { poolAddr: z.string() },
 async ({poolAddr}) => {
-  const poolAddress = new PublicKey(poolAddr); 
-  const dlmmPool = await DLMM.create(connection, poolAddress, {
+  const poolAddress = new PublicKey(poolAddr);
+  const dlmm = (DLMM as any).default; 
+  const dlmmPool = await dlmm.create(connection, poolAddress, {
     cluster: "devnet",
   });
 
@@ -264,7 +270,8 @@ server.tool("add-liquidity-to-existing-position",
   {poolAddr: z.string(),XAmount: z.number()},
   async ({poolAddr,XAmount}) => {
     const poolAddress = new PublicKey(poolAddr); 
-    const dlmmPool = await DLMM.create(connection, poolAddress, {
+    const dlmm = (DLMM as any).default;
+    const dlmmPool = await dlmm.create(connection, poolAddress, {
       cluster: "devnet",
     });
 
@@ -319,7 +326,8 @@ server.tool("remove-liquidity",
   {poolAddr: z.string()},
   async ({poolAddr}) => {
     const poolAddress = new PublicKey(poolAddr);
-    const dlmmPool = await DLMM.create(connection, poolAddress, {
+    const dlmm = (DLMM as any).default;
+    const dlmmPool = await dlmm.create(connection, poolAddress, {
       cluster: "devnet",
     });
 
@@ -374,7 +382,8 @@ server.tool("swap",
   {poolAddr: z.string(), amountToSwap: z.number()},
   async ({poolAddr,amountToSwap}) => {
     const poolAddress = new PublicKey(poolAddr);
-    const dlmmPool = await DLMM.create(connection, poolAddress, {
+    const dlmm = (DLMM as any).default;
+    const dlmmPool = await dlmm.create(connection, poolAddress, {
       cluster: "devnet",
     });
 
