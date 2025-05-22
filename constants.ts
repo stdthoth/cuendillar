@@ -1,6 +1,10 @@
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 import { Connection, Keypair } from "@solana/web3.js";
+import dotenv from "dotenv"
 
+dotenv.config({
+    path:"./.env"
+})
 export const user = Keypair.fromSecretKey(
     new Uint8Array(bs58.decode(process.env.USER_PRIVATE_KEY ||""))
 );
