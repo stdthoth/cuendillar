@@ -25,6 +25,17 @@ const server = new McpServer({
   }
 });
 
+server.tool("create-new-pool",
+  "creates a new liquidity pool and returns the pool address",
+  {tokenX: z.string(), tokenY: z.string(), fee: z.number()},
+  async ({tokenX, tokenY, fee}) => {
+    const dlmm = (DLMM as any).default;
+    const dlmmPool = await dlmm.create(connection, poolAddress, {
+      cluster: "devnet",
+    });
+  } 
+)
+
 server.tool("get-active-bin",
   "gets the active bin of the pool",
   { poolAddr: z.string() },
@@ -430,6 +441,8 @@ server.tool("swap",
     }  
   }
 )
+
+// option to create pools and other stuff 
 
 async function main() {
   const transport = new StdioServerTransport();
