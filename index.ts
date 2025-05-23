@@ -27,13 +27,10 @@ const server = new McpServer({
 
 server.tool("create-new-pool",
   "creates a new liquidity pool and returns the pool address",
-  {tokenX: z.string(), tokenY: z.string(), fee: z.number()},
-  async ({tokenX, tokenY, fee}) => {
+  {tokenX: z.string().describe("this is the address of the base token"), tokenY: z.string().describe("this is the address of the quote token"), Basefee: z.number().describe("this is the fees earned when user swaps within the pool")},
+  async ({tokenX, tokenY, Basefee}) => {
     const dlmm = (DLMM as any).default;
-    const dlmmPool = await dlmm.create(connection, poolAddress, {
-      cluster: "devnet",
-    });
-  } 
+    const dlmmPool = await dlmm.createPermissionLbPair()
 )
 
 server.tool("get-active-bin",
@@ -441,6 +438,50 @@ server.tool("swap",
     }  
   }
 )
+
+// claims fees from the LP
+server.tool("claim-fees",
+  "claims swap fees from the pool",
+  {poolAddr: z.string().describe("Pool Address of the LP")},
+  async ({poolAddr}) => {
+    const poolAddress = new PublicKey(poolAddr);
+    const dlmm = (DLMM as any).default;
+    const dlmmPool = await dlmm.create(connection, poolAddress, {
+      cluster: "devnet",
+    });
+
+    const claimFeeTxs = await dlmmPool.claimAllSwapFee({
+    owner: user.publicKey,
+    positions: userPositions,
+  });
+
+  try {
+    let claimFeeTxHash = ""
+    for (const claimFeeTx of claimFeeTxs) {
+       claimFeeTxHash = await sendAndConfirmTransaction(
+        connection,
+        claimFeeTx,
+        [user]
+      );
+    }
+    return {
+      content:[{type:"text",text: `Transaction Successfull, Transaction Hash: ${claimFeeTxHash}`}]
+    }
+  } catch (err: unknown) {
+    const error = err as Error;
+      return{
+        content: [{
+          type: "text",
+          text: `Error: ${error.message}`
+        }],
+        isError: true
+      };
+  }
+
+  }
+)
+
+
 
 // option to create pools and other stuff 
 
