@@ -1,5 +1,7 @@
 # Cuendillar
 
+  <img src="./assets/asset_2.png" alt="logo" width="150" style="display:block; margin:auto" />
+
 Cuendillar is an MCP server that builds upon Meteora's DLMM (Dynamic Liquid Market Maker) to provide a dynamic and sustainable liquidity layer for deFi on Solana.
 
 ## What is MCP
@@ -77,6 +79,8 @@ The following are the tools currently available to Cuendillar.
 
 - `get-active-bin`: To get the active bin where the current
 pool price resides
+
+![sampleimage](./assets/asset_1.png)
 
 #### Creating a New Liquidity Position
 
