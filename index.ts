@@ -40,8 +40,6 @@ server.tool("get-active-bin",
   "gets the active bin of the pool",
   { poolAddr: z.string() },
   async ({ poolAddr }) => {
-    
-  
     const poolAddress = new PublicKey(poolAddr);
     const dlmm = (DLMM as any).default;
     const dlmmPool = await dlmm.create(connection, poolAddress, {
@@ -52,15 +50,15 @@ server.tool("get-active-bin",
       activeBin = await dlmmPool.getActiveBin();
       const binData: BinLiquidity = {
         binId: activeBin.binId,
-        xAmount: activeBin.xAmount,
-        yAmount: activeBin.yAmount,
-        supply: activeBin.supply,
+        xAmount: new BN(activeBin.xAmount),
+        yAmount: new BN(activeBin.yAmount),
+        supply: new BN(activeBin.supply),
         version: activeBin.version,
         price: activeBin.price,
         pricePerToken: activeBin.pricePerToken,
-        feeAmountXPerTokenStored: activeBin.feeAmountXPerTokenStored,
-        feeAmountYPerTokenStored: activeBin.feeAmountYPerTokenStored,
-        rewardPerTokenStored: activeBin.rewardPerTokenStored
+        feeAmountXPerTokenStored: new BN(activeBin.feeAmountXPerTokenStored),
+        feeAmountYPerTokenStored: new BN(activeBin.feeAmountYPerTokenStored),
+        rewardPerTokenStored: new BN(activeBin.rewardPerTokenStored)[0]
       }
       return {
         content:[{type:"text",text: JSON.stringify(binData)}]
