@@ -1,11 +1,21 @@
 import DLMM, { BinLiquidity, LbPosition, StrategyType } from "@meteora-ag/dlmm";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { Keypair, PublicKey, sendAndConfirmTransaction } from "@solana/web3.js";
+import { Connection,Keypair, PublicKey, sendAndConfirmTransaction } from "@solana/web3.js";
+import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js";
 import BN from "bn.js";
-import dotenv from "dotenv";
 import { z } from "zod";
-import { connection, user } from "./constants";
+import dotenv from "dotenv"
+
+dotenv.config({
+    path:"./.env"
+})
+export const user = Keypair.fromSecretKey(
+    new Uint8Array(bs58.decode(process.env.USER_PRIVATE_KEY ||""))
+);
+
+export const RPC = process.env.RPC || "https://api.devnet.solana.com";
+export const connection = new Connection(RPC, "finalized");
 
 // Load environment variables
 dotenv.config();
@@ -25,13 +35,6 @@ const server = new McpServer({
   }
 });
 
-server.tool("create-new-pool",
-  "creates a new liquidity pool and returns the pool address",
-  {tokenX: z.string().describe("this is the address of the base token"), tokenY: z.string().describe("this is the address of the quote token"), Basefee: z.number().describe("this is the fees earned when user swaps within the pool")},
-  async ({tokenX, tokenY, Basefee}) => {
-    const dlmm = (DLMM as any).default;
-    const dlmmPool = await dlmm.createPermissionLbPair()
-)
 
 server.tool("get-active-bin",
   "gets the active bin of the pool",
@@ -479,11 +482,8 @@ server.tool("claim-fees",
   }
 
   }
-)
+);
 
-
-
-// option to create pools and other stuff 
 
 async function main() {
   const transport = new StdioServerTransport();
