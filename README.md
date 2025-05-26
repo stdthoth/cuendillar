@@ -38,6 +38,7 @@ Create a `.env` file in the root directory resembling this one below
 ```text
     USER_PRIVATE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" #base58 encoded private key 
     RPC="https://api.devnet.solana.com"
+    CLUSTER="devnet"
 ```
 
 ## Basic Usage
@@ -56,7 +57,8 @@ This is the configuration with which claude can connect to the MCP server.
       "args": ["<full-path-to-repo>/dist/index.js"],
       "env":{
           "USER_PRIVATE_KEY":"YOUR_PRIVATE_KEY", 
-    "RPC":"https://api.devnet.solana.com"
+          "RPC":"https://api.devnet.solana.com",
+          "CLUSTER":"devnet"
           }
     }
   }

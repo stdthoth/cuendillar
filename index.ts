@@ -10,12 +10,14 @@ import dotenv from "dotenv"
 dotenv.config({
     path:"./.env"
 })
-export const user = Keypair.fromSecretKey(
+const user = Keypair.fromSecretKey(
     new Uint8Array(bs58.decode(process.env.USER_PRIVATE_KEY ||""))
 );
 
-export const RPC = process.env.RPC || "https://api.devnet.solana.com";
-export const connection = new Connection(RPC, "finalized");
+const RPC = process.env.RPC || "https://api.devnet.solana.com";
+const CLUSTER = process.env.CLUSTER || "devnet";
+
+const connection = new Connection(RPC, "finalized");
 
 // Load environment variables
 dotenv.config();
@@ -43,7 +45,7 @@ server.tool("get-active-bin",
     const poolAddress = new PublicKey(poolAddr);
     const dlmm = (DLMM as any).default;
     const dlmmPool = await dlmm.create(connection, poolAddress, {
-      cluster: "devnet",
+      cluster: CLUSTER,
     });
     try {
       
@@ -87,7 +89,7 @@ server.tool("balance-deposit-position",
     const poolAddress = new PublicKey(poolAddr);
     const dlmm = (DLMM as any).default;
     const dlmmPool = await dlmm.create(connection, poolAddress, {
-      cluster: "devnet",
+      cluster: CLUSTER,
     });
 
     const TOTAL_RANGE_INTERVAL = 10; // 10 bins on each side of the active bin
@@ -145,7 +147,7 @@ server.tool("imbalance-deposit-position",
     const poolAddress = new PublicKey(poolAddr);
     const dlmm = (DLMM as any).default;
     const dlmmPool = await dlmm.create(connection, poolAddress, {
-      cluster: "devnet",
+      cluster: CLUSTER,
     });
     const TOTAL_RANGE_INTERVAL = 10; // 10 bins on each side of the active bin
     const minBinId = activeBin.binId - TOTAL_RANGE_INTERVAL;
@@ -198,7 +200,7 @@ server.tool("create-one-side-position",
     const poolAddress = new PublicKey(poolAddr);
     const dlmm = (DLMM as any).default;
     const dlmmPool = await dlmm.create(connection, poolAddress, {
-      cluster: "devnet",
+      cluster: CLUSTER,
     });
     const TOTAL_RANGE_INTERVAL = 10; // 10 bins on each side of the active bin
     const minBinId = activeBin.binId - TOTAL_RANGE_INTERVAL;
@@ -250,7 +252,7 @@ async ({poolAddr}) => {
   const poolAddress = new PublicKey(poolAddr);
   const dlmm = (DLMM as any).default; 
   const dlmmPool = await dlmm.create(connection, poolAddress, {
-    cluster: "devnet",
+    cluster: CLUSTER,
   });
 
   try {
@@ -281,7 +283,7 @@ server.tool("add-liquidity-to-existing-position",
     const poolAddress = new PublicKey(poolAddr); 
     const dlmm = (DLMM as any).default;
     const dlmmPool = await dlmm.create(connection, poolAddress, {
-      cluster: "devnet",
+      cluster: CLUSTER,
     });
 
     const TOTAL_RANGE_INTERVAL = 10; // 10 bins on each side of the active bin
@@ -337,7 +339,7 @@ server.tool("remove-liquidity",
     const poolAddress = new PublicKey(poolAddr);
     const dlmm = (DLMM as any).default;
     const dlmmPool = await dlmm.create(connection, poolAddress, {
-      cluster: "devnet",
+      cluster: CLUSTER,
     });
 
     const removeLiquidityTxs = (
@@ -393,7 +395,7 @@ server.tool("swap",
     const poolAddress = new PublicKey(poolAddr);
     const dlmm = (DLMM as any).default;
     const dlmmPool = await dlmm.create(connection, poolAddress, {
-      cluster: "devnet",
+      cluster: CLUSTER,
     });
 
     const swapAmount = new BN(amountToSwap);
@@ -448,7 +450,7 @@ server.tool("claim-fees",
     const poolAddress = new PublicKey(poolAddr);
     const dlmm = (DLMM as any).default;
     const dlmmPool = await dlmm.create(connection, poolAddress, {
-      cluster: "devnet",
+      cluster: CLUSTER,
     });
 
     const claimFeeTxs = await dlmmPool.claimAllSwapFee({
